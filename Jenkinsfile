@@ -1,6 +1,6 @@
 node {
     def app
-    def venv = 'venv' // Nombre del directorio del entorno virtual
+    def venvDir = 'venv' // Nombre del directorio del entorno virtual
 
     stage('Clone repository') {
         checkout scm
@@ -18,27 +18,27 @@ node {
 
     stage('Setup Virtual Environment') {
         // Crear el entorno virtual
-        sh "python3 -m venv ${venv}"
+        sh "python3 -m venv ${venvDir}"
 
-        // Activar el entorno virtual y actualizar pip
+        // Activar el entorno virtual y actualizar pip (forzando la actualización)
         sh """
-        . ${venv}/bin/activate
-        pip install --upgrade pip
+        . ${venvDir}/bin/activate
+        pip install --upgrade pip --break-system-packages
         """
     }
 
     stage('Install Dependencies') {
-        // Activar el entorno virtual e instalar dependencias
+        // Activar el entorno virtual e instalar dependencias (forzando la instalación)
         sh """
-        . ${venv}/bin/activate
-        pip install pytest pytest-cov
+        . ${venvDir}/bin/activate
+        pip install pytest pytest-cov --break-system-packages
         """
     }
 
     stage('Run Tests') {
         // Activar el entorno virtual y ejecutar pruebas con cobertura
         sh """
-        . ${venv}/bin/activate
+        . ${venvDir}/bin/activate
         pytest --cov=suma --cov-report xml:coverage.xml
         """
     }
@@ -48,7 +48,7 @@ node {
         withSonarQubeEnv('SonarQube Server') {
             // Activar el entorno virtual y ejecutar el análisis de SonarQube
             sh """
-            . ${venv}/bin/activate
+            . ${venvDir}/bin/activate
             ${scannerHome}/bin/sonar-scanner
             """
         }
