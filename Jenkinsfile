@@ -38,7 +38,7 @@ node {
 
     stage('SonarQube Analysis') {
         def scannerHome = tool 'sonar-scanner'
-        withSonarQubeEnv('SonarQube Server') {
+        withSonarQubeEnv('server-sonar') {
             // Ejecutar el análisis de SonarQube
             sh """
             . ${venvDir}/bin/activate
