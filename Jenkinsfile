@@ -17,7 +17,11 @@ node {
 
     stage('Test and coverage') {
         // Ejecutar pytest con cobertura
-        sh './venv/bin/pytest --cov=app --cov-report=xml --cov-report=term-missing'
+        sh '''
+            . venv/bin/activate
+            export PYTHONPATH=$PWD
+            pytest --cov=app --cov-report=xml:coverage.xml --cov-report=term-missing
+        '''
     }
 
     stage('Push image') {
