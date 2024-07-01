@@ -15,13 +15,23 @@ node {
         }
     }
 
-    stage('SonarQube Analysis') {
-    def scannerHome = tool 'sonar-scanner';
-    withSonarQubeEnv() {
-      sh "${scannerHome}/bin/sonar-scanner"
+    stage('Install Dependencies') {
+        // Instalar dependencias desde requirements.txt
+        sh 'pip install -r requirements.txt'
     }
-  }
-    
+
+    stage('Run Tests') {
+        // Ejecutar pruebas con cobertura
+        sh 'pytest --cov=pytest-report.xml --cov-report xml:coverage.xml'
+    }
+
+    stage('SonarQube Analysis') {
+        def scannerHome = tool 'sonar-scanner'
+        withSonarQubeEnv('SonarQube Server') {
+            sh "${scannerHome}/bin/sonar-scanner"
+        }
+    }
+
     stage('Trigger ManifestUpdate') {
         echo "hola Omar"
     }
