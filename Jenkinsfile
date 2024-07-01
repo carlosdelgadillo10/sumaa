@@ -33,7 +33,7 @@ node {
                 ${scannerHome}/bin/sonar-scanner \
                 -Dsonar.projectKey=suma-fastapi \
                 -Dsonar.sources=app/ \
-                -Dsonar.tests=test_suma \
+                -Dsonar.tests=tests/ \
                 -Dsonar.python.coverage.reportPaths=coverage.xml \
                 -Dsonar.projectVersion=${env.BUILD_NUMBER} \
                 -Dsonar.sourceEncoding=UTF-8
