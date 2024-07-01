@@ -17,7 +17,7 @@ node {
 
     stage('Test and coverage') {
         // Ejecutar pytest con cobertura
-        sh './venv/bin/pytest --cov=. --cov-report=xml --cov-report=term-missing'
+        sh './venv/bin/pytest --cov=app --cov-report=xml --cov-report=term-missing'
     }
 
     stage('Push image') {
@@ -31,9 +31,12 @@ node {
         withSonarQubeEnv('server-sonar') {
             sh """
                 ${scannerHome}/bin/sonar-scanner \
+                -Dsonar.projectKey=suma-fastapi \
+                -Dsonar.sources=app/ \
+                -Dsonar.tests=tests/ \
                 -Dsonar.python.coverage.reportPaths=coverage.xml \
-                -Dsonar.projectKey=suma-fastapi\
-                -Dsonar.sources=.
+                -Dsonar.projectVersion=${env.BUILD_NUMBER} \
+                -Dsonar.sourceEncoding=UTF-8
             """
         }
     }
