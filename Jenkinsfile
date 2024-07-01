@@ -39,7 +39,7 @@ node {
         // Activar el entorno virtual y ejecutar pruebas con cobertura
         sh """
         . ${venvDir}/bin/activate
-        pytest --cov=suma --cov-report xml:coverage.xml
+        pytest --cov=pytest-report.xml --cov-report xml:coverage.xml
         """
     }
 
