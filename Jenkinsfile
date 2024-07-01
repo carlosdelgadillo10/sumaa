@@ -15,14 +15,12 @@ node {
         }
     }
 
-    stage('Install Dependencies') {
-        // Instalar dependencias desde requirements.txt
-        sh 'pip install -r requirements.txt'
-    }
-
     stage('Run Tests') {
+        // Instalar dependencias necesarias
+        sh 'pip install pytest pytest-cov'
+
         // Ejecutar pruebas con cobertura
-        sh 'pytest --cov=pytest-report.xml --cov-report xml:coverage.xml'
+        sh 'pytest --cov=suma --cov-report xml:coverage.xml'
     }
 
     stage('SonarQube Analysis') {
@@ -36,4 +34,3 @@ node {
         echo "hola Omar"
     }
 }
-
