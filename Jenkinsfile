@@ -7,12 +7,12 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build image') {
+        """stage('Build image') {
             steps{
                 app = docker.build("carlosdelgadillo/sumaa")
             }
         
-        }
+        }"""
 
         stage('Setup Python Environment') {
             steps {
