@@ -1,25 +1,20 @@
 pipeline {
     agent any
 
-    environment {
-        GITHUB_CREDENTIALS = credentials('github-token') // ID configurado en Jenkins para el token de GitHub
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credential') // ID configurado en Jenkins para DockerHub
-        DOCKER_IMAGE = "carlosdelgadillo/web" // Reemplaza "tu_usuario/tu_microservicio" con tu nombre de usuario e imagen
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Clone repository') {
             steps {
                 script {
-                    git url: 'https://github.com/carlosdelgadillo10/sumaaa.git', credentialsId: 'github-token'
+                    checkout scm
                 }
             }
         }
-        
-        stage('Build Docker Image') {
+
+        stage('Build image') {
             steps {
                 script {
-                    dockerImage = docker.build("${DOCKER_IMAGE}:${env.BUILD_ID}")
+                    // Construir imagen Docker
+                    def app = docker.build("carlosdelgadillo/sumaa")
                 }
             }
         }
@@ -64,16 +59,6 @@ pipeline {
                             -Dsonar.python.coverage.reportPaths=coverage.xml \
                             -Dsonar.projectVersion=${env.BUILD_NUMBER}
                         """
-                    }
-                }
-            }
-        }
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credential') {
-                        dockerImage.push("${env.BUILD_ID}")
-                        dockerImage.push('latest')
                     }
                 }
             }
