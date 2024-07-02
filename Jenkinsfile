@@ -41,7 +41,6 @@ pipeline {
             }
         }
 
-
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -63,6 +62,16 @@ pipeline {
                 }
             }
         }
+        stage('Push image') {
+            steps {
+                script {
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+            app.push("${env.BUILD_NUMBER}")
+                }
+            }
+        }
+
+
         
     }
 
