@@ -7,6 +7,7 @@ pipeline {
                 checkout scm
             }
         }
+
         stage('Setup Python Environment') {
             steps {
                 script {
@@ -52,13 +53,6 @@ pipeline {
                     }
                 }
             }
-        }
-            stage('Push image') {
-                steps{
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                app.push("${env.BUILD_NUMBER}")
-            }
-                }
         }
     }
 
