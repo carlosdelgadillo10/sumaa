@@ -7,6 +7,12 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Build image') {
+            steps{
+                app = docker.build("carlosdelgadillo/sumaa")
+            }
+        
+        }
 
         stage('Setup Python Environment') {
             steps {
@@ -53,6 +59,13 @@ pipeline {
                     }
                 }
             }
+        }
+            stage('Push image') {
+                steps{
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                app.push("${env.BUILD_NUMBER}")
+            }
+                }
         }
     }
 
