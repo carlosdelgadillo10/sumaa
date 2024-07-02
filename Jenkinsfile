@@ -2,18 +2,27 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Clone repository') {
             steps {
-                checkout scm
+                script {
+                    checkout scm
+                }
             }
         }
 
+        stage('Build image') {
+            steps {
+                script {
+                    // Construir imagen Docker
+                    def app = docker.build("carlosdelgadillo/sumaa")
+                }
+            }
+        }
         stage('Setup Python Environment') {
             steps {
                 script {
                     // Instalación de dependencias en un entorno virtual
                     sh 'python3 -m venv venv'
-                    sh './venv/bin/pip install -r requirements.txt'
                 }
             }
         }
@@ -62,5 +71,8 @@ pipeline {
             deleteDir()
         }
     }
+        
+
+   
 }
 
