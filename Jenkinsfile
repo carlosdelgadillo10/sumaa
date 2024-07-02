@@ -21,17 +21,17 @@ pipeline {
         stage('Run Tests and Coverage') {
             steps {
                 script {
-                    // Ejecución de pruebas y cobertura con pytest
+                    // Ejecutar pruebas y cobertura con pytest
                     sh '''
                         . venv/bin/activate
                         export PYTHONPATH=$PWD
                         pytest --cov=app --cov-report=xml:coverage.xml --cov-report=term-missing \
                             --junit-xml=pytest-report.xml
                     '''
-
                 }
             }
         }
+
 
         stage('SonarQube Analysis') {
             steps {
