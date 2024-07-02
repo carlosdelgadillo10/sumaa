@@ -2,16 +2,23 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone repository') {
-        checkout scm
+        stage('Clone repository') 
+            steps{
+                script{
+                      checkout scm
+                }
+            }
+      
     }
 
-    stage('Build image') {
-        script {
-            app = docker.build("carlosdelgadillo/sumaa")
+        stage('Build image') {
+            steps{
+                script {
+                app = docker.build("carlosdelgadillo/sumaa")
+            }
+            }
+            
         }
-    }
 
         
-}
 }
