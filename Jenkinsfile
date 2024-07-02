@@ -75,13 +75,6 @@ pipeline {
 
         
     }
-
-    post {
-        always {
-            // Limpieza después de la ejecución
-            deleteDir()
-        }
-    }
         
 
    
