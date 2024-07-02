@@ -1,6 +1,5 @@
 pipeline {
     agent any
-    def app
 
     stages {
         stage('Clone repository') {
@@ -14,8 +13,8 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    // Construir imagen Docker
-                    app = docker.build("carlosdelgadillo/sumaa")
+                    // Construir imagen Docker y asignar a la variable global
+                    env.DOCKER_IMAGE = docker.build("carlosdelgadillo/sumaa")
                 }
             }
         }
@@ -66,10 +65,10 @@ pipeline {
         stage('Push image') {
             steps {
                 script {
+                    // Utilizar la imagen construida en 'Build image' para el push
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        app.push("${env.BUILD_NUMBER}")
+                        env.DOCKER_IMAGE.push("${env.BUILD_NUMBER}")
                     }
-                }
             }
         }
         
