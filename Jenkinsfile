@@ -65,16 +65,14 @@ pipeline {
         stage('Push image') {
             steps {
                 script {
-                    // Utilizar la imagen construida en 'Build image' para el push
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        env.DOCKER_IMAGE.push("${env.BUILD_NUMBER}")
+                        // Utilizar la imagen construida en 'Build image' para el push
+                        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                            env.DOCKER_IMAGE.push("${env.BUILD_NUMBER}")
                     }
+                }
             }
-        }
         
+        } 
     }
-        
-
-   
 }
 
