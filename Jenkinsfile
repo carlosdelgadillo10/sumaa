@@ -83,7 +83,7 @@ pipeline {
                     <p>Ver detalles en: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                     """,
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                to: "carlos.degadillo102003@gmail.com"
+                to: "carlitos.chitivita@gmail.com"
             )
         }
     }
