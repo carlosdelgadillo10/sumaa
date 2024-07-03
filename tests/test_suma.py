@@ -2,7 +2,7 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.suma import app
-
+import MEXICO
 client = TestClient(app)
 
 def test_sumar():
