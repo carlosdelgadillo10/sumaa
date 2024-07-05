@@ -15,8 +15,7 @@ pipeline {
             steps {
                 script {
                     // Construir imagen Docker
-                    app = docker.build("sumaa", "./")
-                    //app = docker.build("carlosdelgadillo/sumaa")
+                    app = docker.build("carlosdelgadillo/sumaa")
                 }
             }
         }
@@ -35,25 +34,10 @@ pipeline {
         stage('Deploy'){
             steps{
                 script{
-                    sh 'docker run -d -p 8001:8001 sumaa'
-                    // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
+                    sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                 }
             }
         }
-        /*stage('SAST - Bandit') {
-            steps {
-                sh'''                     
-                    python3 -m venv venv
-                    . venv/bin/activate
-                    bandit -r . -f html -o bandit_report.html
-                    '''          
-            }
-            post {                                                                                                    
-                always {
-                    archiveArtifacts artifacts: 'bandit_report.html', allowEmptyArchive: true
-                }
-            }
-        }*/
 
         stage('SonarQube Analysis') {
             steps {
@@ -87,7 +71,7 @@ pipeline {
         }
         
     }
-/*    post {
+    post {
         failure {
             emailext (
                 subject: "BUILD FAILED: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
@@ -100,7 +84,7 @@ pipeline {
             )
         }
     }
-*/     
+        
 
    
 }
