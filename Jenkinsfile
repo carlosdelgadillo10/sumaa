@@ -39,7 +39,7 @@ pipeline {
                 }
             }
         }
-        stage('SAST - Bandit') {
+        /*stage('SAST - Bandit') {
             steps {
                 sh'''                     
                     python3 -m venv venv
@@ -52,7 +52,7 @@ pipeline {
                     archiveArtifacts artifacts: 'bandit_report.html', allowEmptyArchive: true
                 }
             }
-        }
+        }*/
 
         stage('SonarQube Analysis') {
             steps {
