@@ -15,8 +15,8 @@ pipeline {
             steps {
                 script {
                     // Construir imagen Docker
+                    app = docker.build("sumaa", "./")
                     app = docker.build("carlosdelgadillo/sumaa")
-                    app2 = docker.build("sumaa", "./")
                 }
             }
         }
@@ -80,7 +80,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        app2.push("${env.BUILD_NUMBER}")
+                        app.push("${env.BUILD_NUMBER}")
                     }
                 }
             }
