@@ -15,8 +15,8 @@ pipeline {
             steps {
                 script {
                     // Construir imagen Docker
-                    app = sh 'docker build -t sumaa .'
-                    //zapp = docker.build("carlosdelgadillo/sumaa")
+                    app = docker build(sh ' docker build -t sumaa .')
+                    //app = docker.build("carlosdelgadillo/sumaa")
                 }
             }
         }
@@ -79,9 +79,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        sh '''docker tag sumaa carlosdelgadillo/sumaa
-                            docker push carlosdelgadillo/sumaa
-                            '''
+                        app.push("${env.BUILD_NUMBER}")
                     }
                 }
             }
