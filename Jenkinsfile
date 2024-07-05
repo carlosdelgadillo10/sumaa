@@ -79,7 +79,9 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        app.push("${env.BUILD_NUMBER}")
+                        sh '''docker tag sumaa carlosdelgadillo/sumaa
+                            docker push carlosdelgadillo/sumaa
+                            '''
                     }
                 }
             }
