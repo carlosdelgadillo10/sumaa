@@ -26,6 +26,9 @@ pipeline {
                 script {
                     // Ejecutar pruebas y cobertura con pytest
                     sh '''
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install bandit
                         pytest --cov=app --cov-report=xml:coverage.xml --cov-report=term-missing \
                             --junit-xml=pytest-report.xml
                     '''
@@ -41,7 +44,10 @@ pipeline {
         }
         stage('SAST - Bandit') {
             steps {
-                sh 'bandit -r . -f html -o bandit_report.html'
+                sh'''
+                    . venv/bin/activate
+                    bandit -r . -f html -o bandit_report.html'
+                    '''          
             }
             post {
                 always {
