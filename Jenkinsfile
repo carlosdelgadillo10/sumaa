@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     // Construir imagen Docker
-                    app = docker.build("sumaa")
+                    app = docker.build("sumaa", "./")
                     //app = docker.build("carlosdelgadillo/sumaa")
                 }
             }
@@ -35,7 +35,8 @@ pipeline {
         stage('Deploy'){
             steps{
                 script{
-                    sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
+                    sh 'docker run -d -p 8001:8001 sumaa'
+                    // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                 }
             }
         }
