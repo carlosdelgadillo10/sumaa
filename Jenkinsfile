@@ -39,17 +39,18 @@ pipeline {
                 }
             }
         }
-        stage('SAST - Bandit') {
+        stage('DAST - OWASP ZAP') {
             steps {
-                sh'''
-                    python3 -m venv venv
-                    . venv/bin/activate
-                    bandit -r . -f html -o bandit_report.html
-                    '''          
+                script {
+                    def zapHome = tool name: 'OWASP ZAP', type: 'zap'
+                    sh "${zapHome}/zap.sh -daemon -port 8090 -host 0.0.0.0 -config api.disablekey=true"
+                    sh "sleep 10" // Espera a que OWASP ZAP inicie
+                    sh "${zapHome}/zap-api-scan.py -t http://localhost:8001 -f zap_report.html -r"
+                }
             }
             post {
                 always {
-                    archiveArtifacts artifacts: 'bandit_report.html', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'zap_report.html', allowEmptyArchive: true
                 }
             }
         }
