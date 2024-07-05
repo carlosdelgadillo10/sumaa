@@ -15,7 +15,8 @@ pipeline {
             steps {
                 script {
                     // Construir imagen Docker
-                    app = docker.build("carlosdelgadillo/sumaa")
+                    app = sh 'docker build sumaa .'
+                    //app = docker.build("carlosdelgadillo/sumaa")
                 }
             }
         }
@@ -38,6 +39,7 @@ pipeline {
                 }
             }
         }
+        stage
 
         stage('SonarQube Analysis') {
             steps {

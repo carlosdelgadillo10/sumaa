@@ -6,4 +6,5 @@ pytest
 pytest 
 pytest-xdist
 pytest-cov
+bandit
 
