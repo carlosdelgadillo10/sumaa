@@ -46,6 +46,7 @@ pipeline {
                     sh "cd /usr/local/bin/owasp-zap"
                     sh "zap.sh -daemon -port 8090 -host 0.0.0.0 -config api.disablekey=true"
                     
+                }
             }
             post {
                 always {
