@@ -46,7 +46,7 @@ pipeline {
             steps {
                 sh'''
                     . venv/bin/activate
-                    bandit -r . -f html -o bandit_report.html'
+                    bandit -r . -f html -o bandit_report.html
                     '''          
             }
             post {
