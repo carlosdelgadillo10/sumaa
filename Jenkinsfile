@@ -44,7 +44,7 @@ pipeline {
         stage('Deploy'){
             steps{
                 script{
-                    sh 'docker-compose up -d'
+                    sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                 }
             }
         }

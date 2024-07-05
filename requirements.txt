@@ -1,4 +1,7 @@
 fastapi
+docker>=6.1.3
+requests>=2.31.0
+urllib3>=2.0.6
 pydantic
 uvicorn
 httpx
