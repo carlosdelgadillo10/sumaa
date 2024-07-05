@@ -19,14 +19,6 @@ pipeline {
                 }
             }
         }
-        stage('Setup Python Environment') {
-            steps {
-                script {
-                    // Instalación de dependencias en un entorno virtual
-                    sh 'python3 -m venv venv'
-                }
-            }
-        }
 
         stage('Run Tests and Coverage') {
             steps {
