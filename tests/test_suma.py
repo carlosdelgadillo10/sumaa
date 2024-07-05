@@ -2,7 +2,6 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.suma import app
-import Mexico
 
 client = TestClient(app)
 
