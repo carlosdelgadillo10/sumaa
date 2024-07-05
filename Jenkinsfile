@@ -1,6 +1,9 @@
 def app
 pipeline {
     agent any
+    environment {
+        ZAP_HOME = '/usr/local/bin/owasp-zap' // Reemplaza con la ruta real
+    }
 
     stages {
         stage('Clone repository') {
@@ -43,9 +46,13 @@ pipeline {
             steps {
                 script {
                     // Inicia ZAP en modo demonio
-                    sh "cd /usr/local/bin/owasp-zap"
-                    sh "zap.sh -daemon -port 8090 -host 0.0.0.0 -config api.disablekey=true"
-                    
+                    sh "${env.ZAP_HOME}zap.sh -daemon -port 8090 -host 0.0.0.0 -config api.disablekey=true"
+                    // Espera a que OWASP ZAP inicie
+                    sleep(time: 10, unit: 'SECONDS')
+                    // Escanea la aplicación
+                    sh "${env.ZAP_HOME}zap-cli quick-scan -t http://localhost:8000"
+                    // Genera un reporte HTML
+                    sh "${env.ZAP_HOME}zap-cli report -o zap_report.html -f html"
                 }
             }
             post {
