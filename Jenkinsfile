@@ -39,15 +39,6 @@ pipeline {
                 }
             }
         }
-        stage('SAST - Bandit') {
-            steps {
-                sh'''
-                    python3 -m venv venv
-                    . venv/bin/activate
-                    bandit -r . -f html -o bandit_report.html
-                    '''          
-            }
-        }
 
         stage('SonarQube Analysis') {
             steps {
