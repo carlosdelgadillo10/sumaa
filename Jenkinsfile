@@ -16,7 +16,7 @@ pipeline {
                 script {
                     // Construir imagen Docker
                     app = sh 'docker build sumaa .'
-                    //app = docker.build("carlosdelgadillo/sumaa")
+                    //zapp = docker.build("carlosdelgadillo/sumaa")
                 }
             }
         }
@@ -39,7 +39,16 @@ pipeline {
                 }
             }
         }
-        stage
+        stage('SAST - Bandit') {
+            steps {
+                sh 'bandit -r . -f html -o bandit_report.html'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'bandit_report.html', allowEmptyArchive: true
+                }
+            }
+        }
 
         stage('SonarQube Analysis') {
             steps {
