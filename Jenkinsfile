@@ -16,6 +16,7 @@ pipeline {
                 script {
                     // Construir imagen Docker
                     app = docker.build("carlosdelgadillo/sumaa")
+                    app2 = docker.build("sumaa", "./")
                 }
             }
         }
@@ -34,10 +35,25 @@ pipeline {
         stage('Deploy'){
             steps{
                 script{
-                    sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
+                    sh 'docker run -d -p 8001:8001 sumaa'
+                    // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                 }
             }
         }
+        /*stage('SAST - Bandit') {
+            steps {
+                sh'''                     
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    bandit -r . -f html -o bandit_report.html
+                    '''          
+            }
+            post {                                                                                                    
+                always {
+                    archiveArtifacts artifacts: 'bandit_report.html', allowEmptyArchive: true
+                }
+            }
+        }*/
 
         stage('SonarQube Analysis') {
             steps {
@@ -64,14 +80,14 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        app.push("${env.BUILD_NUMBER}")
+                        app2.push("${env.BUILD_NUMBER}")
                     }
                 }
             }
         }
         
     }
-    post {
+/*    post {
         failure {
             emailext (
                 subject: "BUILD FAILED: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
@@ -84,7 +100,7 @@ pipeline {
             )
         }
     }
-        
+*/     
 
    
 }
