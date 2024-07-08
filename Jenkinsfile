@@ -50,6 +50,12 @@ pipeline {
                 }
             }
         }
+        /*stage(‘Deploy to Minikube’) {
+            steps {
+                script{
+                    sh "kubectl apply -f my-react-deployments.yaml"
+                }
+            }*/
         /*stage('SAST - Bandit') {
             steps {
                 sh'''                     
