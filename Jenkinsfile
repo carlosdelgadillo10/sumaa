@@ -44,9 +44,9 @@ pipeline {
         stage('Deploy'){
             steps{
                 script{
-                    sh "docker.stop ${DOCKER_IMAGE}"
+                    //sh "docker.stop ${DOCKER_IMAGE}"
                     sh "docker.rmi ${DOCKER_IMAGE} -f"
-                    sh "docker run --name ${DOCKER_IMAGE} -d -p 8001:8001 ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    sh "docker run -d -p 8001:8001 ${DOCKER_IMAGE}:${DOCKER_TAG}"
                     //sh 'docker run -d -p 8001:8001 sumaa'
                     // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                 }
