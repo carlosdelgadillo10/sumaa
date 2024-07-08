@@ -44,7 +44,13 @@ pipeline {
         stage('Deploy'){
             steps{
                 script{
-                    sh "docker run --name ${DOCKER_IMAGE}_container -d -p 8001:8001 ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    try {
+                        docker.stop(DOCKER_IMAGE)
+                        docker.removeContainer(DOCKER_IMAGE)
+                    } catch (Exception e) {
+                        echo "El contenedor $DOCKER_IMAGE no existía previamente."
+                    }
+                    sh "docker run --name ${DOCKER_IMAGE} -d -p 8001:8001 ${DOCKER_IMAGE}:${DOCKER_TAG}"
                     //sh 'docker run -d -p 8001:8001 sumaa'
                     // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                 }
