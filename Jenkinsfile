@@ -45,8 +45,8 @@ pipeline {
             steps{
                 script{
                     try {
-                        docker.stop(DOCKER_IMAGE)
-                        docker.removeContainer(DOCKER_IMAGE)
+                        sh "docker.stop ${DOCKER_IMAGE}"
+                        sh "docker.rmi ${DOCKER_IMAGE} -f"
                     } catch (Exception e) {
                         echo "El contenedor $DOCKER_IMAGE no existía previamente."
                     }
