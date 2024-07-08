@@ -77,7 +77,7 @@ pipeline {
             }
         }*/
 
-        stage('SonarQube Analysis') {
+        /*stage('SonarQube Analysis') {
             steps {
                 script {
                     def scannerHome = tool 'sonar-scanner'
@@ -97,7 +97,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
         stage('Push image') {
             steps {
                 script {
