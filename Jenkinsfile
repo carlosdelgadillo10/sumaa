@@ -24,7 +24,7 @@ pipeline {
                 script {
                     // Construir imagen Docker
                     // Construye la imagen Docker
-                    sh "docker build -t ${DOCKER_IMAGE}."
+                    sh "docker build -t ${DOCKER_IMAGE} ."
                     //app = docker.build("carlosdelgadillo/sumaa")
                 }
             }
