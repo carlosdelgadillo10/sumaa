@@ -7,5 +7,13 @@ COPY . /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8085
-CMD ["uvicorn", "app.suma:app", "--host", "0.0.0.0", "--port", "8085"]
+# Definir una variable de entorno para configurar el puerto
+ARG PUERTO=8085
+#Esta es la configuración por defecto que se usará si el usuario no especifica otra mediante una variable de entorno al ejecutar el contenedor.
+
+# Exponer el puerto especificado por la variable de entorno PUERTO
+EXPOSE $PUERTO
+
+# Comando por defecto para ejecutar la aplicación usando Uvicorn, usando la variable de entorno para el puerto
+CMD ["uvicorn", "app.suma:app", "--host", "0.0.0.0", "--port", "${PUERTO}"]
+#escuchar en 0.0.0.0, significa que está dispuesto a recibir conexiones desde cualquier dirección IP disponible en la máquina host
