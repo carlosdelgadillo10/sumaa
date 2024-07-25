@@ -34,6 +34,7 @@ pipeline {
             steps {
                 script {
                     // Ejecutar pruebas y cobertura con pytest
+                    sh 'pip install pytest'
                     sh '''
                         pytest --cov=app --cov-report=xml:coverage.xml --cov-report=term-missing \
                             --junit-xml=pytest-report.xml
