@@ -37,6 +37,7 @@ pipeline {
                     sh '''
                         . venv/bin/activate
                         export PYTHONPATH=$PWD
+                        pip install fastapi uvicorn
                         pip install pytest pytest-cov
                         pytest --cov=app --cov-report=xml:coverage.xml --cov-report=term-missing \
                             --junit-xml=pytest-report.xml
