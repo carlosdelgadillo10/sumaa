@@ -34,8 +34,10 @@ pipeline {
             steps {
                 script {
                     // Ejecutar pruebas y cobertura con pytest
-                    sh 'pip install pytest'
                     sh '''
+                        . venv/bin/activate
+                        export PYTHONPATH=$PWD
+                        pip install pytest
                         pytest --cov=app --cov-report=xml:coverage.xml --cov-report=term-missing \
                             --junit-xml=pytest-report.xml
                     '''
