@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: suma-deployment
+  namespace: suma
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: suma
+  template:
+    metadata:
+      labels:
+        app: suma
+    spec:
+      containers:
+      - name: suma
+        image: carlosdelgadillo/sumaa:v2
+        ports:
+        - containerPort: 8085

@@ -46,7 +46,7 @@ pipeline {
                 script{
                     //sh "docker.stop ${DOCKER_IMAGE}"
                     //sh "docker.rmi ${DOCKER_IMAGE} -f"
-                    sh "docker run -d -p 8001:8001 ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
                     //sh 'docker run -d -p 8001:8001 sumaa'
                     // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                 }
@@ -109,8 +109,22 @@ pipeline {
                 }
             }
         }
+        stage('Apply Kubernetes Files') {
+            steps {
+                withKubeConfig([credentialsId: 'mykubeconfig']) {
+                // Nota para alkcanzar el archivo le decimos que a la altura.
+                //Instalar plugin kubernetes CLI
+                sh 'kubectl apply -f ./k8s/namespace.yaml'
+                sh 'kubectl apply -f ./k8s/deployment.yaml'
+                sh 'kubectl apply -f ./k8s/service.yaml'
+                sh 'kubectl apply -f ./k8s/ingress.yaml'
+                sh 'kubectl -n resta expose deployment  suma-deployment --type=NodePort --port=8004'
+                }
+            }
+        }
         
     }
+    
 /*    post {
         failure {
             emailext (
