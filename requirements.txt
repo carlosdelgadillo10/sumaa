@@ -3,4 +3,3 @@ pydantic
 uvicorn
 httpx
 bandit
-

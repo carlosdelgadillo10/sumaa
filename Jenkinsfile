@@ -7,6 +7,7 @@ pipeline {
         DOCKER_TAG = "latest"
         DOCKERHUB_CREDENTIALS_ID = "docker-hub-credentials"
         DOCKERHUB_REPO = "carlosdelgadillo/sumaa"
+        KUBECTL_CONFIG = '/home/carlosd/.kube/config' // Ajusta según tu configuración
     }
 
 
