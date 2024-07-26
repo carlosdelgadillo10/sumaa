@@ -48,9 +48,9 @@ pipeline {
         }
         stage('Check Running Container') {
             steps {
+                def containerRunning = sh(script: "docker ps --filter 'ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}' --filter 'publish=8085' --format '{{.ID}}'", returnStatus: true)
                 script {
                     // Verifica si ya hay un contenedor corriendo en el puerto 8085
-                    def containerRunning = sh(script: "docker ps --filter 'ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}' --filter 'publish=8085' --format '{{.ID}}'", returnStatus: true)
                     if (containerRunning == 0) {
                         currentBuild.result = 'SUCCESS'
                         echo "El contenedor ya está corriendo. No se ejecutará el despliegue."
