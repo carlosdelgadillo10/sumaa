@@ -5,7 +5,6 @@ pipeline {
         // Variables de entorno para Docker
         DOCKER_IMAGE = "carlosdelgadillo/sumaa"
         DOCKER_TAG = "latest"
-        CONTAINER_NAME = 'sumaa' 
         DOCKERHUB_CREDENTIALS_ID = "docker-hub-credentials"
         DOCKERHUB_REPO = "carlosdelgadillo/sumaa"
         KUBECTL_CONFIG = '/home/carlosd/.kube/config' // Ajusta según tu configuración
@@ -47,46 +46,26 @@ pipeline {
                 }
             }
         }
-                stage('Ejecutar Contenedor Docker') {
+        stage('Deploy') {
             steps {
                 script {
-                    // Verifica si el contenedor ya está en ejecución
-                    def containerRunning = sh (
-                        script: "docker ps --filter 'name=${CONTAINER_NAME}' --format '{{.Names}}' | grep ${CONTAINER_NAME}",
-                        returnStatus: true
-                    )
-                    
-                    if (containerRunning != 0) {
-                        sh "docker run -d --name ${CONTAINER_NAME} -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    // Verifica si ya hay un contenedor corriendo en el puerto 8085
+                    def isRunning = sh(script: "docker ps --filter 'ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}' --filter 'publish=8085' --format '{{.ID}}'", returnStdout: true).trim()
+
+                    if (isRunning) {
+                        echo "El contenedor ya está corriendo. No se ejecutará el despliegue."
                     } else {
-                        echo 'El contenedor ya está en ejecución, no se necesita ejecutar nuevamente.'
+                        echo "No hay contenedor corriendo en el puerto 8085. Ejecutando el despliegue..."
+                        //sh "docker.stop ${DOCKER_IMAGE}"
+                        //sh "docker.rmi ${DOCKER_IMAGE} -f"
+                        sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                        //sh 'docker run -d -p 8001:8001 sumaa'
+                        // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                     }
                 }
             }
         }
-        /*stage('Deploy'){
-            steps{
-                script{
-                    //sh "docker.stop ${DOCKER_IMAGE}"
-                    //sh "docker.rmi ${DOCKER_IMAGE} -f"
-                    //sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    //sh 'docker run -d -p 8001:8001 sumaa'
-                    // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
-                    // Verifica si el contenedor ya está en ejecución
-                    // Verifica si el contenedor ya está en ejecución
-                    def containerRunning = sh (
-                        script: "docker ps --filter 'name=${CONTAINER_NAME}' --format '{{.Names}}' | grep ${CONTAINER_NAME}",
-                        returnStatus: true
-                    )
-                    
-                    if (containerRunning != 0) {
-                        sh "docker run -d --name ${CONTAINER_NAME} -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    } else {
-                        echo 'El contenedor ya está en ejecución, no se necesita ejecutar nuevamente.'
-                    }
-                }
-            }
-        }*/
+
         /*stage(‘Deploy to Minikube’) {
             steps {
                 script{
