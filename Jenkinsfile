@@ -56,6 +56,7 @@ pipeline {
                     //sh 'docker run -d -p 8001:8001 sumaa'
                     // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                     // Verifica si el contenedor ya está en ejecución
+                    // Verifica si el contenedor ya está en ejecución
                     def containerRunning = sh (
                         script: "docker ps --filter 'name=${CONTAINER_NAME}' --format '{{.Names}}' | grep ${CONTAINER_NAME}",
                         returnStatus: true
