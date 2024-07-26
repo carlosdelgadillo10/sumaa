@@ -46,22 +46,30 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Check Running Container') {
             steps {
                 script {
                     // Verifica si ya hay un contenedor corriendo en el puerto 8085
-                    def isRunning = sh(script: "docker ps --filter 'ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}' --filter 'publish=8085' --format '{{.ID}}'", returnStdout: true).trim()
-
-                    if (isRunning) {
+                    def containerRunning = sh(script: "docker ps --filter 'ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}' --filter 'publish=8085' --format '{{.ID}}'", returnStatus: true)
+                    if (containerRunning == 0) {
+                        currentBuild.result = 'SUCCESS'
                         echo "El contenedor ya está corriendo. No se ejecutará el despliegue."
-                    } else {
-                        echo "No hay contenedor corriendo en el puerto 8085. Ejecutando el despliegue..."
-                        //sh "docker.stop ${DOCKER_IMAGE}"
-                        //sh "docker.rmi ${DOCKER_IMAGE} -f"
-                        sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                        //sh 'docker run -d -p 8001:8001 sumaa'
-                        // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                     }
+                }
+            }
+        }
+        stage('Deploy') {
+            when {
+                expression { currentBuild.result != 'SUCCESS' }
+            }
+            steps {
+                script {
+                    echo "No hay contenedor corriendo en el puerto 8085. Ejecutando el despliegue..."
+                    //sh "docker.stop ${DOCKER_IMAGE}"
+                    //sh "docker.rmi ${DOCKER_IMAGE} -f"
+                    sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    //sh 'docker run -d -p 8001:8001 sumaa'
+                    // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                 }
             }
         }
