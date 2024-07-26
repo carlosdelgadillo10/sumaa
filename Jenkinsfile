@@ -123,7 +123,17 @@ pipeline {
                 sh 'kubectl apply -f ./k8s/deployment.yaml'
                 sh 'kubectl apply -f ./k8s/service.yaml'
                 sh 'kubectl apply -f ./k8s/ingress.yaml'
-                sh 'kubectl -n suma expose deployment  suma-deployment --type=NodePort --port=8004'
+                // Verifica si el servicio ya existe antes de exponerlo
+                    def serviceExists = sh (
+                        script: 'kubectl -n suma get service suma-deployment --ignore-not-found',
+                        returnStatus: true
+                    )
+                    
+                    if (serviceExists != 0) {
+                        sh 'kubectl -n suma expose deployment suma-deployment --type=NodePort --port=8004'
+                    } else {
+                        echo 'El servicio suma-deployment ya existe, no se necesita exponerlo nuevamente.'
+                    }
                 }
             }
         }
