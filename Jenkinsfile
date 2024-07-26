@@ -47,7 +47,24 @@ pipeline {
                 }
             }
         }
-        stage('Deploy'){
+                stage('Ejecutar Contenedor Docker') {
+            steps {
+                script {
+                    // Verifica si el contenedor ya está en ejecución
+                    def containerRunning = sh (
+                        script: "docker ps --filter 'name=${CONTAINER_NAME}' --format '{{.Names}}' | grep ${CONTAINER_NAME}",
+                        returnStatus: true
+                    )
+                    
+                    if (containerRunning != 0) {
+                        sh "docker run -d --name ${CONTAINER_NAME} -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    } else {
+                        echo 'El contenedor ya está en ejecución, no se necesita ejecutar nuevamente.'
+                    }
+                }
+            }
+        }
+        /*stage('Deploy'){
             steps{
                 script{
                     //sh "docker.stop ${DOCKER_IMAGE}"
@@ -69,7 +86,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
         /*stage(‘Deploy to Minikube’) {
             steps {
                 script{
