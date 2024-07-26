@@ -3,7 +3,7 @@ pipeline {
     agent any
     environment {
         // Variables de entorno para Docker
-        DOCKER_IMAGE = "sumaa"
+        DOCKER_IMAGE = "carlosdelgadillo/sumaa"
         DOCKER_TAG = "latest"
         DOCKERHUB_CREDENTIALS_ID = "docker-hub-credentials"
         DOCKERHUB_REPO = "carlosdelgadillo/sumaa"
@@ -25,8 +25,8 @@ pipeline {
                 script {
                     // Construir imagen Docker
                     // Construye la imagen Docker
-                    sh "docker build -t ${DOCKER_IMAGE} ."
-                    //app = docker.build("carlosdelgadillo/sumaa")
+                    //sh "docker build -t ${DOCKER_IMAGE} ."
+                    app = docker.build("${DOCKER_IMAGE}")
                 }
             }
         }
@@ -103,13 +103,13 @@ pipeline {
             steps {
                 script {
                     // Inicia sesión en DockerHub
-                    withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
-                        sh "echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin"
+                    //withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                        //sh "echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin"
                         // Etiqueta y sube la imagen a DockerHub
-                        sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKERHUB_REPO}:${DOCKER_TAG}"
-                        sh "docker push ${DOCKERHUB_REPO}:${DOCKER_TAG}"
-                    /*docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        app.push("${env.BUILD_NUMBER}")*/
+                        //sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKERHUB_REPO}:${DOCKER_TAG}"
+                        //sh "docker push ${DOCKERHUB_REPO}:${DOCKER_TAG}"
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                        app.push("${env.BUILD_NUMBER}")
                     }
                 }
             }
