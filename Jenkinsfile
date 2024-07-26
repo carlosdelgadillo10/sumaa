@@ -64,16 +64,17 @@ pipeline {
             }*/
             steps {
                 script {
-                    // Verifica si ya hay un contenedor corriendo en el puerto 8085
+                    // Intenta detener y eliminar cualquier contenedor usando el puerto 8085
                     sh '''
-                    CONTAINER_ID=$(docker ps --filter "ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}" --filter "publish=8085" --format "{{.ID}}")
+                    CONTAINER_ID=$(docker ps -q --filter "publish=8085")
                     if [ -n "$CONTAINER_ID" ]; then
-                        echo "El contenedor ya está corriendo. No se ejecutará el despliegue."
-                        exit 0
+                        echo "Deteniendo el contenedor que usa el puerto 8085..."
+                        docker stop $CONTAINER_ID
+                        docker rm $CONTAINER_ID
                     fi
+                    echo "Desplegando nuevo contenedor..."
+                    docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}
                     '''
-                    // Solo ejecutará el siguiente bloque si el contenedor no está corriendo
-                    sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
                     //sh "docker.stop ${DOCKER_IMAGE}"
                     //sh "docker.rmi ${DOCKER_IMAGE} -f"
                     //sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
