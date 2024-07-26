@@ -64,10 +64,19 @@ pipeline {
             }*/
             steps {
                 script {
-                    echo "No hay contenedor corriendo en el puerto 8085. Ejecutando el despliegue..."
+                    // Verifica si ya hay un contenedor corriendo en el puerto 8085
+                    sh '''
+                    CONTAINER_ID=$(docker ps --filter "ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}" --filter "publish=8085" --format "{{.ID}}")
+                    if [ -n "$CONTAINER_ID" ]; then
+                        echo "El contenedor ya está corriendo. No se ejecutará el despliegue."
+                        exit 0
+                    fi
+                    '''
+                    // Solo ejecutará el siguiente bloque si el contenedor no está corriendo
+                    sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
                     //sh "docker.stop ${DOCKER_IMAGE}"
                     //sh "docker.rmi ${DOCKER_IMAGE} -f"
-                    sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    //sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
                     //sh 'docker run -d -p 8001:8001 sumaa'
                     // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
                 }
@@ -141,16 +150,15 @@ pipeline {
                 sh 'kubectl apply -f ./k8s/service.yaml'
                 sh 'kubectl apply -f ./k8s/ingress.yaml'
                 // Verifica si el servicio ya existe antes de exponerlo
-                    def serviceExists = sh (
-                        script: 'kubectl -n suma get service suma-deployment --ignore-not-found',
-                        returnStatus: true
-                    )
-                    
-                    if (serviceExists != 0) {
-                        sh 'kubectl -n suma expose deployment suma-deployment --type=NodePort --port=8004'
-                    } else {
-                        echo 'El servicio suma-deployment ya existe, no se necesita exponerlo nuevamente.'
-                    }
+                // Verifica si el servicio ya existe y, si no, expónlo
+                sh '''
+                    if ! kubectl -n suma get service suma-deployment --ignore-not-found > /dev/null 2>&1; then
+                        echo "El servicio no existe, exponiéndolo ahora..."
+                        kubectl -n suma expose deployment suma-deployment --type=NodePort --port=8004
+                    else
+                        echo "El servicio suma-deployment ya existe, no se necesita exponerlo nuevamente."
+                    fi
+                '''
                 }
             }
         }
