@@ -5,6 +5,7 @@ pipeline {
         // Variables de entorno para Docker
         DOCKER_IMAGE = "carlosdelgadillo/sumaa"
         DOCKER_TAG = "latest"
+        CONTAINER_NAME = 'sumaa' 
         DOCKERHUB_CREDENTIALS_ID = "docker-hub-credentials"
         DOCKERHUB_REPO = "carlosdelgadillo/sumaa"
         KUBECTL_CONFIG = '/home/carlosd/.kube/config' // Ajusta según tu configuración
@@ -51,9 +52,20 @@ pipeline {
                 script{
                     //sh "docker.stop ${DOCKER_IMAGE}"
                     //sh "docker.rmi ${DOCKER_IMAGE} -f"
-                    sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    //sh "docker run -d -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
                     //sh 'docker run -d -p 8001:8001 sumaa'
                     // sh 'docker run -d -p 8001:8001 carlosdelgadillo/sumaa'
+                    // Verifica si el contenedor ya está en ejecución
+                    def containerRunning = sh (
+                        script: "docker ps --filter 'name=${CONTAINER_NAME}' --format '{{.Names}}' | grep ${CONTAINER_NAME}",
+                        returnStatus: true
+                    )
+                    
+                    if (containerRunning != 0) {
+                        sh "docker run -d --name ${CONTAINER_NAME} -p 8085:8085 ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    } else {
+                        echo 'El contenedor ya está en ejecución, no se necesita ejecutar nuevamente.'
+                    }
                 }
             }
         }
