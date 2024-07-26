@@ -46,22 +46,22 @@ pipeline {
                 }
             }
         }
-        stage('Check Running Container') {
+        /*stage('Check Running Container') {
             steps {
                 script {
                     // Verifica si ya hay un contenedor corriendo en el puerto 8085
                     def containerRunning = sh(script: "docker ps --filter 'ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}' --filter 'publish=8085' --format '{{.ID}}'", returnStatus: true)
                         if (containerRunning == 0) {
-                            currentBuild.result = 'SUCCESS'
+                            currentBuild.resusudo service jenkins restartlt = 'SUCCESS'
                             echo "El contenedor ya está corriendo. No se ejecutará el despliegue."
                         }
                 }
             }
-        }
+        }*/
         stage('Deploy') {
-            when {
+            /*when {
                 expression { currentBuild.result != 'SUCCESS' }
-            }
+            }*/
             steps {
                 script {
                     echo "No hay contenedor corriendo en el puerto 8085. Ejecutando el despliegue..."
