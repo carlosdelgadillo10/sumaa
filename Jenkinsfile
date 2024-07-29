@@ -155,7 +155,7 @@ pipeline {
                 sh '''
                     if ! kubectl -n suma get service suma-deployment --ignore-not-found > /dev/null 2>&1; then
                         echo "El servicio no existe, exponiéndolo ahora..."
-                        kubectl -n suma expose deployment suma-deployment --type=NodePort --port=8004
+                        kubectl -n suma expose deployment suma-deployment --type=NodePort --port=8085
                     else
                         echo "El servicio suma-deployment ya existe, no se necesita exponerlo nuevamente."
                     fi
