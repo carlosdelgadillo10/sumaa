@@ -9,7 +9,7 @@ pipeline {
         DOCKERHUB_REPO = "carlosdelgadillo/sumaa"
         KUBECTL_CONFIG = '/home/carlosd/.kube/config' // Ajusta según tu configuración
         SLACK_CHANNEL = '#app'  // El canal donde quieres enviar las notificaciones
-        SLACK_CREDENTIAL_ID = 'slack'  // El ID de las credenciales que creaste
+        SLACK_CREDENTIAL_ID = "slack"  // El ID de las credenciales que creaste
     }
 
 
