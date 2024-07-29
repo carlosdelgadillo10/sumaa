@@ -8,6 +8,8 @@ pipeline {
         DOCKERHUB_CREDENTIALS_ID = "docker-hub-credentials"
         DOCKERHUB_REPO = "carlosdelgadillo/sumaa"
         KUBECTL_CONFIG = '/home/carlosd/.kube/config' // Ajusta según tu configuración
+        SLACK_CHANNEL = '#app'  // El canal donde quieres enviar las notificaciones
+        SLACK_CREDENTIAL_ID = 'slack'  // El ID de las credenciales que creaste
     }
 
 
@@ -167,10 +169,20 @@ pipeline {
     }
     post {
         success {
-            slackSend (color: '#00FF00', message: "Build exitoso: ${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.BUILD_URL}|Open>)")
+            slackSend (
+                channel: env.SLACK_CHANNEL,
+                color: '#00FF00',
+                message: "Build exitoso: ${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.BUILD_URL}|Open>)",
+                tokenCredentialId: env.SLACK_CREDENTIAL_ID
+            )
         }
         failure {
-            slackSend (color: '#FF0000', message: "Build fallido: ${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.BUILD_URL}|Open>)")
+            slackSend (
+                channel: env.SLACK_CHANNEL,
+                color: '#FF0000',
+                message: "Build fallido: ${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.BUILD_URL}|Open>)",
+                tokenCredentialId: env.SLACK_CREDENTIAL_ID
+            )
         }
     }
     
