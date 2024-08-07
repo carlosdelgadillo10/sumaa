@@ -1,20 +1,26 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  # Especifica la versión de la API de Kubernetes que se está utilizando.
+kind: Deployment # Define el tipo de objeto como un Deployment.
 metadata:
-  name: suma-deployment
+  name: suma-deployment   # Nombre del Deployment.
   namespace: microservices-qa
 spec:
-  replicas: 3
+  replicas: 1   # Número inicial de réplicas (pods) que se ejecutarán.
   selector:
     matchLabels:
-      app: suma
+      app: suma  # Etiqueta utilizada para seleccionar los pods que pertenecen a este Deployment.
   template:
     metadata:
       labels:
-        app: suma
+        app: suma   # Etiqueta que se aplica a los pods creados por este template.
     spec:
-      containers:
+      containers:   # Nombre del contenedor.
       - name: suma
-        image: carlosdelgadillo/sumaa:v2
+        image: carlosdelgadillo/sumaa:v2   # Imagen Docker del contenedor.
         ports:
-        - containerPort: 8085
+        - containerPort: 8085   # Puerto en el contenedor que se expondrá.
+        resources:
+          requests:
+            cpu: "100m"   # # Solicitud de recursos mínimos para el contenedor (0.1 cores)
+          limits:
+            cpu: "500m"  # Límite máximo de recursos que puede utilizar el contenedor.
+
