@@ -46,18 +46,6 @@ pipeline {
                 }
             }
         }
-        /*stage('Check Running Container') {
-            steps {
-                script {
-                    // Verifica si ya hay un contenedor corriendo en el puerto 8085
-                    def containerRunning = sh(script: "docker ps --filter 'ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}' --filter 'publish=8085' --format '{{.ID}}'", returnStatus: true)
-                        if (containerRunning == 0) {
-                            currentBuild.resusudo service jenkins restartlt = 'SUCCESS'
-                            echo "El contenedor ya está corriendo. No se ejecutará el despliegue."
-                        }
-                }
-            }
-        }*/
         stage('Deploy') {
             /*when {
                 expression { currentBuild.result != 'SUCCESS' }
@@ -83,27 +71,6 @@ pipeline {
                 }
             }
         }
-
-        /*stage(‘Deploy to Minikube’) {
-            steps {
-                script{
-                    sh "kubectl apply -f my-react-deployments.yaml"
-                }
-            }*/
-        /*stage('SAST - Bandit') {
-            steps {
-                sh'''                     
-                    python3 -m venv venv
-                    . venv/bin/activate
-                    bandit -r . -f html -o bandit_report.html
-                    '''          
-            }
-            post {                                                                                                    
-                always {
-                    archiveArtifacts artifacts: 'bandit_report.html', allowEmptyArchive: true
-                }
-            }
-        }*/
 
         /*stage('SonarQube Analysis') {
             steps {
