@@ -113,7 +113,7 @@ pipeline {
             steps {
                 script {
                     // Enviar un mensaje a Slack notificando que se requiere una aprobación
-                    slackSend(channel: '#deployments', color: '#FFFF00', message: "El build está esperando aprobación para el despliegue.")
+                    slackSend(channel: '#jenkins', color: '#FFFF00', message: "El build está esperando aprobación para el despliegue.")
                     
                     // Espera la entrada del usuario en Jenkins
                     def userInput = input message: '¿Quieres proceder con el despliegue?', 
