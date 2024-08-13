@@ -10,4 +10,4 @@ spec:
     name: suma-deployment  # Nombre del Deployment que será escalado
   minReplicas: 1  # Número mínimo de réplicas del Deployment
   maxReplicas: 10  # Número máximo de réplicas del Deployment
-  targetCPUUtilizationPercentage: 50  # Porcentaje de utilización de CPU objetivo para escalar las réplicas
+  targetCPUUtilizationPercentage: 2  # Porcentaje de utilización de CPU objetivo para escalar las réplicas 

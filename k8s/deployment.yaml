@@ -3,6 +3,10 @@ kind: Deployment # Define el tipo de objeto como un Deployment.
 metadata:
   name: suma-deployment   # Nombre del Deployment.
   namespace: microservices-qa
+  annotations:
+    prometheus.io/scrape: "true"          # Indica a Prometheus que debe recoger métricas de este deployment.
+    prometheus.io/path: "/metrics"        # Especifica la ruta donde se encuentran las métricas.
+    prometheus.io/port: "8085"            # Indica el puerto donde se exponen las métricas.
 spec:
   replicas: 1   # Número inicial de réplicas (pods) que se ejecutarán.
   selector:

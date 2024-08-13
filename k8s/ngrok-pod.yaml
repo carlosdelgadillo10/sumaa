@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ngrok
+  namespace: microservices-qa
+spec:
+  containers:
+  - name: ngrok
+    image: wernight/ngrok
+    command:
+    - ngrok
+    args:
+    - http
+    - "8085" # Cambia esto al puerto del servicio que quieres exponer
+    ports:
+    - containerPort: 4040 # Puerto para el dashboard de ngrok
