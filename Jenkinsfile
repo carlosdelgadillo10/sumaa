@@ -111,22 +111,10 @@ pipeline {
         stage('Approval') {
             agent none  // Ejecutar en el controlador de Jenkins, no en un agente específico
             steps {
-                script {
+                input(message: 'Deploy to Stage', ok: 'Yes')
+                script{
                     // Enviar un mensaje a Slack notificando que se requiere una aprobación
                     slackSend(channel: '#jenkins', color: '#FFFF00', message: "El build está esperando aprobación para el despliegue.")
-                    
-                    // Espera la entrada del usuario en Jenkins
-                    def userInput = input message: '¿Quieres proceder con el despliegue?', 
-                                        ok: 'Deploy', 
-                                        submitter: 'admin', 
-                                        parameters: [booleanParam(defaultValue: true, description: '', name: 'Deploy')]
-                    
-                    // Si el usuario selecciona "Deploy", continúa con el pipeline
-                    if (userInput == true) {
-                        echo "Proceeding with deployment..."
-                    } else {
-                        error "Deployment aborted by user."
-                    }
                 }
             }
         }
