@@ -1,6 +1,6 @@
 def app
 pipeline {
-    agent { label 'linux-node' }
+    agent any//{ label 'linux-node' }
     environment {
         // Variables de entorno para Docker
         DOCKER_IMAGE = "carlosdelgadillo/sumaa"
