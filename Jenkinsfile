@@ -11,7 +11,8 @@ pipeline {
     }
 }
 
-/*def app
+/*
+def app
 pipeline {
     agent any//{ label 'linux-node' }
     environment {
@@ -62,7 +63,7 @@ pipeline {
         stage('Deploy') {
             /*when {
                 expression { currentBuild.result != 'SUCCESS' }
-            }*/
+            }
             steps {
                 script {
                     // Intenta detener y eliminar cualquier contenedor usando el puerto 8085
@@ -105,7 +106,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
         stage('Push image') {
             steps {
                 script {
