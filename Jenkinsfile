@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                call('World') // Usando la función definida en la Shared Library
+                gitcheck('World') // Llamada correcta a la función de la Shared Library
             }
         }
     }
