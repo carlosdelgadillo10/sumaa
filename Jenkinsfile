@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Example') {
             steps {
-                nombreFunción('World') // Usando la función definida en la Shared Library
+                call('World') // Usando la función definida en la Shared Library
             }
         }
     }
