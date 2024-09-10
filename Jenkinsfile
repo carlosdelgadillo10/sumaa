@@ -2,14 +2,26 @@
 
 pipeline {
     agent any
+    environment {
+        DOCKER_IMAGE = "carlosdelgadillo/sumaa"
+        DOCKER_TAG = "latest"
+        DOCKERHUB_CREDENTIALS_ID = "docker-hub-credentials"
+        DOCKERHUB_REPO = "carlosdelgadillo/sumaa"
+    }
     stages {
-        stage('Example') {
+        stage('Greeting') {
             steps {
-                gitcheck('World') // Llamada correcta a la función de la Shared Library
+                gitcheck('World') // Usando la función de saludo
+            }
+        }
+        stage('Push image') {
+            steps {
+                pushDockerImage(DOCKERHUB_CREDENTIALS_ID, DOCKER_IMAGE, DOCKER_TAG, DOCKERHUB_REPO)
             }
         }
     }
 }
+
 
 /*
 def app
