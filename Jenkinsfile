@@ -1,4 +1,17 @@
-def app
+@Library('gitcheck') _
+
+pipeline {
+    agent any
+    stages {
+        stage('Example') {
+            steps {
+                nombreFunción('World') // Usando la función definida en la Shared Library
+            }
+        }
+    }
+}
+
+/*def app
 pipeline {
     agent any//{ label 'linux-node' }
     environment {
@@ -154,3 +167,4 @@ pipeline {
    
 }
 
+/*
